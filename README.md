@@ -13,3 +13,15 @@ Enabled **Microsoft Sentinel** on the Log Analytics Workspace to provide SIEM ca
 Finally, confirmed that Sentinel had been successfully enabled by viewing the workspace in **Microsoft Defender**.
 
 <img width="2536" height="1256" alt="image" src="https://github.com/user-attachments/assets/5c54bf15-0bd2-4929-baa0-ce0221f6ee13" />
+
+
+Connected the **MyDFIR-Luke-LAW** Log Analytics Workspace to **Microsoft Defender XDR** and configured it as the primary Microsoft Sentinel workspace.
+
+Using the **Content hub**, installed the **Azure Activity** solution. Azure Activity Logs capture subscription-level events, including resource creation and deletion, configuration changes, administrative actions, service health events, and other operations performed through Azure Resource Manager. These logs provide visibility into changes made across the Azure environment and can be used to detect suspicious or unauthorised administrative activity.
+
+With the Azure Activity solution installed, the environment is now ready for the **Microsoft Sentinel Training Lab** configuration.
+
+### Configure Azure Activity Logs
+
+Configured **Azure Activity Logs** to be sent to the **Log Analytics Workspace** via **Subscription → Activity Log → Diagnostic settings**. Enabled the **Administrative**, **Security**, and **Alert** log categories, allowing Microsoft Sentinel to ingest subscription-level events for monitoring and investigation.
+
