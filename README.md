@@ -25,3 +25,13 @@ With the Azure Activity solution installed, the environment is now ready for the
 
 Configured **Azure Activity Logs** to be sent to the **Log Analytics Workspace** via **Subscription → Activity Log → Diagnostic settings**. Enabled the **Administrative**, **Security**, and **Alert** log categories, allowing Microsoft Sentinel to ingest subscription-level events for monitoring and investigation.
 
+### Microsoft Sentinel Training Lab Setup
+
+The **Microsoft Sentinel Training Lab** is a Microsoft-provided lab that loads pre-recorded security data into Sentinel and provides exercises for investigating threats, creating detections and working with security incidents.
+
+I deployed the lab using the provided Azure template but ran into an issue where a previous deployment had created an **automation rule**. Even after deleting the deployment, Azure continued to detect the rule as a duplicate, causing new deployments to fail.
+
+After trying to clean up the existing resources and redeploy, I eventually switched to a fresh Azure account and deployed the lab in East US, where the deployment completed successfully.
+
+<img width="2444" height="813" alt="image" src="https://github.com/user-attachments/assets/afe515cd-dcae-4f4d-8093-78e03f9e3553" />
+
