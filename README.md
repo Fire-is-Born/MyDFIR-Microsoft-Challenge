@@ -35,3 +35,15 @@ After trying to clean up the existing resources and redeploy, I eventually switc
 
 <img width="2444" height="813" alt="image" src="https://github.com/user-attachments/assets/afe515cd-dcae-4f4d-8093-78e03f9e3553" />
 
+Used this query to return a small sample of records from the sign-in logs. This helped me understand what data and fields were available before writing a more targeted query.
+
+<img width="1894" height="698" alt="image" src="https://github.com/user-attachments/assets/67a1ad43-7352-4214-a2c3-2f162abe9569" />
+
+Used this query to identify users with failed sign-in attempts and count how many failures were associated with each account. The results are then sorted to make accounts with the highest number of failed attempts easier to spot.
+
+<img width="1923" height="537" alt="image" src="https://github.com/user-attachments/assets/b4ff4adf-b010-45b7-8cf7-25b275eb865f" />
+
+Wrote this KQL query to identify sign-in attempts involving disabled user accounts using result code 50057. I then used project to display only the relevant fields, making the results easier to review during an investigation.
+<img width="1787" height="543" alt="image" src="https://github.com/user-attachments/assets/c7101d13-0dac-46bb-860a-78a647326f0f" />
+
+
