@@ -48,32 +48,66 @@ Wrote this KQL query to identify sign-in attempts involving disabled user accoun
 
 ## Creating a Failed Login Visualisation
 
-<img width="2148" height="1073" alt="image" src="https://github.com/user-attachments/assets/953e4665-5348-4228-8212-978a45a09576" />
+<img width="2125" height="813" alt="image" src="https://github.com/user-attachments/assets/d0a098a6-f60a-4145-8145-37409ef21034" />
 
-Created a visualisation in the Microsoft Sentinel workbook to identify which accounts had the highest number of failed login attempts.
 
-Windows **Event ID 4625** represents a failed account logon. I used the following KQL query:
+
+I created a custom Microsoft Sentinel workbook to practise using KQL and learn how security data can be presented in a way that is useful to a SOC analyst.
+
+When building the dashboard, I kept three main ideas in mind:
+
+**Visibility** – Can I see what is happening across different parts of the environment, such as users, endpoints and email?
+
+**Volume** – Can I see how much activity is happening, such as failed logins or security alerts?
+
+**Trends** – Can I spot increases or changes in activity that could be worth investigating?
+
+For this dashboard I decided to start with authentication activity, security alerts and email threats.
+
+### Top 10 Accounts by Failed Login Attempts
+
+I started by looking at failed Windows logins. **Event ID 4625** is generated when an account fails to log on, so I used it to find the accounts with the most failed attempts.
 
 ```kusto
 SecurityEvent
 | where EventID == 4625
+| extend Account = toupper(Account)
+| where isnotempty(Account) and Account != "\\"
 | summarize Count = count() by Account
-| sort by Count
-| take 10
+| top 10 by Count desc
 ```
 
-The query searches the `SecurityEvent` table for Event ID 4625, groups the results by account and counts the number of failed login attempts associated with each one. It then returns the top 10 accounts.
+While looking at the results, I noticed the same account could appear with different capitalisation, such as `\administrator` and `\ADMINISTRATOR`. I used `toupper()` to make these consistent before counting them and also removed an invalid account entry.
 
-I displayed the results as a **pie chart** and removed the automatically generated **"Others"** group so the visualisation remains focused on the accounts with the most failed login activity.
+I displayed the top 10 results as a **donut chart** to quickly show which accounts had the most failed login activity.
 
-## Dashboard Design Principles
+### Security Alerts by Severity
 
-Going forward, I will keep three main principles in mind when deciding what information to include in the SOC dashboard:
+Next I wanted a simple overview of the alerts that had actually been generated and how serious they were.
 
-**Visibility** – Can I see what is happening across the environment? This could include endpoints, users and identities, email, cloud resources and network activity.
+```kusto
+SecurityAlert
+| summarize AlertCount = count() by AlertSeverity
+| order by AlertCount desc
+```
 
-**Volume** – Can I see how much activity is occurring? This includes things such as failed logins, security alerts, incidents and authentication attempts.
+This groups the alerts by severity and counts each group. The dataset contained **8 High, 2 Medium and 1 Low severity alerts**.
 
-**Trends** – Can I identify when activity is increasing or changing over time? For example, an increase in failed logins, a sudden spike in alerts or unusual activity associated with a particular account.
+I used a **bar chart** for this because it makes it easy to compare the number of alerts at each severity and quickly see that High severity alerts make up most of the results.
 
-The aim is to create a dashboard that helps an analyst quickly understand what is happening and identify activity that may require further investigation, rather than simply displaying as much data as possible.
+### Actions Taken on Detected Phishing Emails
+
+I also wanted the dashboard to cover something other than Windows and authentication events, so I looked at the email security data in `MailGuard365_Threats_CL`.
+
+The dataset used both `Phish` and `Phishing` as threat verdicts, so I included both when filtering the results.
+
+```kusto
+MailGuard365_Threats_CL
+| where ThreatVerdict in ("Phish", "Phishing")
+| summarize EmailCount = count() by Action
+| order by EmailCount desc
+```
+
+I grouped the detected phishing emails by the action that was taken against them. This returned **11 phishing emails: 10 were allowed and 1 was quarantined**.
+
+I displayed this as a **donut chart** because there are only two outcomes and I wanted to make the difference between them easy to see. The fact that most of the detected phishing emails were allowed also gives me something interesting to investigate further.
