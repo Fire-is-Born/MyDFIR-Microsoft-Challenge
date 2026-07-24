@@ -50,9 +50,11 @@ Wrote this KQL query to identify sign-in attempts involving disabled user accoun
 
 <img width="2148" height="1073" alt="image" src="https://github.com/user-attachments/assets/953e4665-5348-4228-8212-978a45a09576" />
 
+## Creating a Failed Login Visualisation
+
 Created a visualisation in the Microsoft Sentinel workbook to identify which accounts had the highest number of failed login attempts.
 
-Windows **Event ID 4625** represents a failed account logon, so I used the following KQL query:
+Windows **Event ID 4625** represents a failed account logon. I used the following KQL query:
 
 ```kusto
 SecurityEvent
@@ -60,3 +62,20 @@ SecurityEvent
 | summarize Count = count() by Account
 | sort by Count
 | take 10
+```
+
+The query searches the `SecurityEvent` table for Event ID 4625, groups the results by account and counts the number of failed login attempts associated with each one. It then returns the top 10 accounts.
+
+I displayed the results as a **pie chart** and removed the automatically generated **"Others"** group so the visualisation remains focused on the accounts with the most failed login activity.
+
+## Dashboard Design Principles
+
+Going forward, I will keep three main principles in mind when deciding what information to include in the SOC dashboard:
+
+**Visibility** – Can I see what is happening across the environment? This could include endpoints, users and identities, email, cloud resources and network activity.
+
+**Volume** – Can I see how much activity is occurring? This includes things such as failed logins, security alerts, incidents and authentication attempts.
+
+**Trends** – Can I identify when activity is increasing or changing over time? For example, an increase in failed logins, a sudden spike in alerts or unusual activity associated with a particular account.
+
+The aim is to create a dashboard that helps an analyst quickly understand what is happening and identify activity that may require further investigation, rather than simply displaying as much data as possible.
