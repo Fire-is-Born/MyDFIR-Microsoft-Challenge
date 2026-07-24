@@ -46,4 +46,17 @@ Used this query to identify users with failed sign-in attempts and count how man
 Wrote this KQL query to identify sign-in attempts involving disabled user accounts using result code 50057. I then used project to display only the relevant fields, making the results easier to review during an investigation.
 <img width="1787" height="543" alt="image" src="https://github.com/user-attachments/assets/c7101d13-0dac-46bb-860a-78a647326f0f" />
 
+## Creating a Failed Login Visualisation
 
+<img width="2148" height="1073" alt="image" src="https://github.com/user-attachments/assets/953e4665-5348-4228-8212-978a45a09576" />
+
+Created a visualisation in the Microsoft Sentinel workbook to identify which accounts had the highest number of failed login attempts.
+
+Windows **Event ID 4625** represents a failed account logon, so I used the following KQL query:
+
+```kusto
+SecurityEvent
+| where EventID == 4625
+| summarize Count = count() by Account
+| sort by Count
+| take 10
