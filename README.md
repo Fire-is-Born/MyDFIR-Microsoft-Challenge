@@ -50,8 +50,6 @@ Wrote this KQL query to identify sign-in attempts involving disabled user accoun
 
 <img width="2148" height="1073" alt="image" src="https://github.com/user-attachments/assets/953e4665-5348-4228-8212-978a45a09576" />
 
-## Creating a Failed Login Visualisation
-
 Created a visualisation in the Microsoft Sentinel workbook to identify which accounts had the highest number of failed login attempts.
 
 Windows **Event ID 4625** represents a failed account logon. I used the following KQL query:
